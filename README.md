@@ -59,7 +59,7 @@ Hello World
 
 ```
 
-## Build your a simple pipeline .
+## Build  a simple pipeline .
 1. create a github repo under your user name .
 2. copy application.yml and app folder to your repo .
 3. edit application.yml .

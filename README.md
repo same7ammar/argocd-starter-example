@@ -35,4 +35,59 @@ OFj9zupMWoCUu6nu
 
 ![Alt text](files/1.PNG?raw=true "Argocd Dashborad")
 
-## 4.Deploy Sample .
+## 4.Deploy a Sample app using Argocd .
+```sh 
+git clone https://github.com/same7ammar/argocd-starter-example.git
+kubeclt apply -f application.yml
+application.argoproj.io/first-argo-application created
+```
+check the app in Argocd dashborad .
+
+![Alt text](files/2.PNG?raw=true "first-argo-application")
+
+```sh
+$ kubectl get pods -n web-app
+NAME                              READY   STATUS    RESTARTS   AGE
+nodejs-web-app-6fdf6d4f54-7drlz   1/1     Running   0          29m
+
+$ kubectl get svc
+NAME             TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)          AGE
+nodejs-web-app   LoadBalancer   10.43.240.254   172.17.152.146   3000:30043/TCP   7s
+to test service use  curl http://EXTERNAL-IP:PORT
+$ curl http://172.17.152.146 
+Hello World
+
+```
+
+## Build your a simple pipeline .
+1. create a github repo under your user name .
+2. copy application.yml and app folder to your repo .
+3. edit application.yml .
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: first-argo-application
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL:  https://yourgitrepo
+    targetRevision: HEAD
+    path: app # mainfest folder in your repo
+  destination: 
+    server: https://kubernetes.default.svc
+    namespace: web-app  # namespace for your app .
+```
+4. deploy application.yml using kubectl .
+```sh
+kubectl apply  -f application.yml
+```
+5. push a new version of your app ie. edit 
+```yaml
+      containers:
+        - name: nodejs-web-app
+          image: same7ammar/node-web-app-k8s:v1
+```
+Check your argocd dashborad , new version show be avaiable .

@@ -18,6 +18,6 @@ spec:
     spec:
       containers:
         - name: nodejs-web-app
-          image: same7ammar/node-web-app-k8s
+          image: same7ammar/node-web-app-k8s:v1
           ports:
             - containerPort: 3000
